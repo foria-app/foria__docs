@@ -5,7 +5,7 @@ on: [push]
 jobs:
   build:
     name: Deploy to staging
-    if: github.ref != 'refs/heads/master'
+    if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-16.04
     steps:
       - name: Checkout
@@ -38,7 +38,7 @@ jobs:
 
   publish-netlify:
     name: Deploy to prod
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-16.04
     steps:
       - name: Checkout
