@@ -1,0 +1,14 @@
+{
+  "devDependencies": {
+    "eslint": "^7.21.0",
+    "eslint-config-dipasqualew": "^1.0.5",
+    "netlify-cli": "^3.10.2",
+    "vuepress": "^1.8.2"
+  },
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
+    "docs:publish:staging": "./bin/publish-staging.sh",
+    "docs:publish:prod": "./bin/publish-prod.sh"
+  }
+}

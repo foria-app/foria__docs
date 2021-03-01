@@ -1,0 +1,68 @@
+name: test-and-build
+
+on: [push]
+
+jobs:
+  build:
+    name: Deploy to staging
+    if: github.ref != 'refs/heads/master'
+    runs-on: ubuntu-16.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: Restore node_modules cache
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install dependencies
+        run: yarn install
+        env:
+          CYPRESS_INSTALL_BINARY: 0
+
+      - name: Build
+        run: yarn docs:build
+
+      - name: Publish on Netlify (staging)
+        run: yarn docs:publish:staging ${{ github.sha }} ${{ github.actor }} ${{ github.ref }}
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+
+  publish-netlify:
+    name: Deploy to prod
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-16.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: Restore node_modules cache
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build
+        run: yarn docs:build
+
+      - name: Publish on Netlify (prod)
+        run: yarn docs:publish:prod ${{ github.sha }} ${{ github.actor }} ${{ github.ref }} --prod
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
