@@ -11,13 +11,26 @@ module.exports = {
       {
         title: 'Philosophy',
         path: '/philosophy/',
-        children: [],
+        collapsable: false,
+        children: [
+          '/philosophy/what-is-foria',
+          '/philosophy/links',
+          '/philosophy/creators-first',
+          '/philosophy/advertisement',
+          '/philosophy/opensource',
+        ],
       },
       {
         title: 'Tech',
         path: '/tech/',
-        children: [],
+        collapsable: false,
+        children: [
+          '/tech/free-and-serverful',
+          '/tech/models-and-database',
+          '/tech/federations',
+        ],
       }
-    ]
+    ],
+    smoothScroll: true
   }
 }
